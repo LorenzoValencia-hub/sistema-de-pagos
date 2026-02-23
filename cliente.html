@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Cliente</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <a href="panel.html" class="btn-regresar">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Regresar al Panel
+        </a>
+
+        <div class="card header-cliente">
+            <div class="cliente-info-top">
+                <h2 id="nombre-cliente">Cargando cliente...</h2>
+                </div>
+            
+            <div class="cliente-stats row">
+                <div class="stat-box">
+                    <p>Deuda Total Original</p>
+                    <h3 id="deuda-total">$0.00</h3>
+                </div>
+                <div class="stat-box highlight">
+                    <p>Saldo Restante</p>
+                    <h3 id="saldo-restante">$0.00</h3>
+                </div>
+            </div>
+
+            <button id="btn-imprimir-historial" class="btn-secondary">
+                🖨️ Imprimir Historial Completo
+            </button>
+        </div>
+
+        <div class="card">
+            <h3>Calendario de Pagos</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th># Pago</th>
+                            <th>Fecha</th>
+                            <th>Monto</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-pagos">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="cliente.js"></script>
+</body>
+</html>

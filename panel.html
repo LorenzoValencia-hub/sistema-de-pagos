@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel - Sistema de Pagos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="panel-body">
+    <nav class="navbar">
+        <h2>Sistema de Pagos</h2>
+        <button id="btn-logout" class="btn-danger">Cerrar Sesión</button>
+    </nav>
+
+    <div class="menu-tabs">
+        <button class="tab-btn active" id="tab-registrar">📝 Registrar Cliente</button>
+        <button class="tab-btn" id="tab-activos">👥 Lista de Clientes</button>
+        <button class="tab-btn" id="tab-finalizados">✅ Clientes Finalizados</button>
+    </div>
+
+    <div class="dashboard-container">
+        <section id="sec-registrar" class="card tab-content active-content">
+            <h3>Registrar Nuevo Cliente</h3>
+            <form id="form-cliente">
+                <div class="input-group">
+                    <label for="nombre">Nombre del Cliente</label>
+                    <input type="text" id="nombre" required placeholder="Ej. Juan Pérez">
+                </div>
+                
+                <div class="row">
+                    <div class="input-group">
+                        <label for="monto-prestado">Monto a Prestar ($)</label>
+                        <input type="number" id="monto-prestado" required placeholder="Ej. 5000">
+                    </div>
+                    <div class="input-group">
+                        <label for="interes">Interés Total (%)</label>
+                        <input type="number" id="interes" required placeholder="Ej. 25">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label for="pagos">Cantidad de Pagos</label>
+                        <input type="number" id="pagos" required placeholder="Ej. 10">
+                    </div>
+                    <div class="input-group">
+                        <label for="frecuencia">Frecuencia</label>
+                        <select id="frecuencia" required>
+                            <option value="semanal">Semanal</option>
+                            <option value="quincenal">Quincenal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label for="fecha">Fecha de Inicio</label>
+                        <input type="date" id="fecha" required>
+                    </div>
+                    <div class="input-group" style="background: #e2e8f0; padding: 15px; border-radius: 5px; border-left: 4px solid #007bff;">
+                        <p style="margin:0; font-size:14px; color: #333;">Deuda Total: <strong>$<span id="resumen-total">0.00</span></strong></p>
+                        <p style="margin:8px 0 0 0; font-size:16px; color:#28a745;">Monto por Pago: <strong>$<span id="resumen-pago">0.00</span></strong></p>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-guardar" style="margin-top: 15px;">Guardar Cliente</button>
+            </form>
+        </section>
+
+        <section id="sec-activos" class="card tab-content">
+            <h3>Clientes Activos (Con Deuda)</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Préstamo Original</th> <th>Deuda Total</th>
+                            <th>Saldo Restante</th>
+                            <th>Frecuencia</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-activos">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="sec-finalizados" class="card tab-content">
+            <h3>Clientes que han terminado de pagar</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Préstamo Original</th> <th>Deuda Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-finalizados">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+    <script type="module" src="panel.js"></script>
+</body>
+</html>

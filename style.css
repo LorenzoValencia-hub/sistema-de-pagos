@@ -1,0 +1,371 @@
+/* =========================================
+   VARIABLES DE COLOR Y DISEÑO
+========================================= */
+:root {
+    --primary-color: #2563eb; /* Azul moderno */
+    --primary-hover: #1d4ed8;
+    --danger-color: #ef4444;  /* Rojo suave */
+    --success-color: #10b981; /* Verde esmeralda */
+    --info-color: #0ea5e9;    /* Azul claro */
+    --bg-color: #f1f5f9;      /* Fondo gris muy claro */
+    --card-bg: #ffffff;
+    --text-main: #0f172a;     /* Texto casi negro */
+    --text-muted: #64748b;    /* Texto secundario gris */
+    --border-color: #e2e8f0;
+    --radius: 12px;
+}
+
+/* =========================================
+   RESETEO BÁSICO Y TIPOGRAFÍA
+========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================
+   PANTALLA DE LOGIN (index.html)
+========================================= */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.login-box {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 30px;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-box h2 { font-size: 24px; margin-bottom: 8px; }
+.login-box p { color: var(--text-muted); margin-bottom: 30px; font-size: 14px; }
+
+/* =========================================
+   BARRA DE NAVEGACIÓN SUPERIOR
+========================================= */
+.navbar {
+    background-color: #1e293b; /* Color oscuro profesional */
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.navbar h2 { font-size: 18px; font-weight: 600; }
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* =========================================
+   MENÚ DE PESTAÑAS (TABS)
+========================================= */
+.menu-tabs {
+    display: flex;
+    gap: 10px;
+    padding: 15px 20px;
+    background-color: var(--card-bg);
+    overflow-x: auto; /* Permite deslizar si no caben */
+    white-space: nowrap; /* Evita que el texto se parta */
+    border-bottom: 1px solid var(--border-color);
+    /* Ocultar barra de scroll en celulares */
+    scrollbar-width: none; 
+}
+.menu-tabs::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+    background-color: var(--bg-color);
+    color: var(--text-muted);
+    padding: 12px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1; /* Hacemos que midan lo mismo en celulares */
+    text-align: center;
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+}
+
+.tab-content { display: none; }
+.active-content { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   CONTENEDOR PRINCIPAL Y TARJETAS
+========================================= */
+.dashboard-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border-color);
+}
+
+.card h3 {
+    margin-bottom: 20px;
+    color: var(--text-main);
+    font-size: 18px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* =========================================
+   FORMULARIOS (Diseño Táctil)
+========================================= */
+.row {
+    display: flex;
+    flex-direction: column; /* Apila en celular */
+    gap: 0;
+}
+
+.input-group {
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.input-group input, 
+.input-group select {
+    width: 100%;
+    /* 16px mínimo para evitar que el iPhone haga zoom automático */
+    font-size: 16px; 
+    padding: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    outline: none;
+    transition: all 0.2s;
+}
+
+.input-group input:focus, 
+.input-group select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    background-color: white;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+    margin-top: 10px;
+}
+
+/* =========================================
+   TABLAS RESPONSIVAS
+========================================= */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* Deslizamiento horizontal */
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px; /* Obliga a la tabla a no aplastarse en celulares */
+    background: white;
+}
+
+th {
+    background-color: var(--bg-color);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border-color);
+}
+
+td {
+    padding: 16px;
+    font-size: 14px;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+tr:hover {
+    background-color: #f8fafc;
+}
+
+/* =========================================
+   ADAPTACIÓN PARA PANTALLAS GRANDES (PC)
+========================================= */
+@media (min-width: 768px) {
+    .row {
+        flex-direction: row;
+        gap: 20px;
+    }
+    .menu-tabs {
+        justify-content: center; /* Centra las pestañas en PC */
+    }
+    .tab-btn {
+        flex: none;
+        width: 250px; /* Ancho fijo en PC */
+    }
+}
+
+/* =========================================
+   ESTILOS PERFIL DEL CLIENTE (cliente.html)
+========================================= */
+.btn-regresar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+.btn-regresar:hover { color: var(--primary-hover); }
+
+.header-cliente { margin-bottom: 20px; }
+
+.cliente-info-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.cliente-info-top h2 { margin: 0; color: var(--text-main); font-size: 22px; }
+
+.cliente-stats { gap: 15px; margin-bottom: 20px; }
+
+.stat-box {
+    background-color: var(--bg-color);
+    padding: 15px;
+    border-radius: 8px;
+    flex: 1;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.stat-box p { 
+    color: var(--text-muted); 
+    font-size: 12px; 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    margin-bottom: 5px; 
+}
+
+.stat-box h3 { color: var(--text-main); font-size: 24px; margin: 0; }
+
+/* Caja resaltada para el saldo que debe */
+.stat-box.highlight { background-color: #fef2f2; border-color: #fca5a5; }
+.stat-box.highlight h3 { color: var(--danger-color); }
+
+.badge {
+    background-color: var(--success-color);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Color naranja para lo que aún no se paga */
+.badge.pendiente { background-color: #f59e0b; } 
+
+.btn-secondary {
+    width: 100%;
+    padding: 14px;
+    background-color: white;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: 0.2s;
+}
+
+.btn-secondary:hover { background-color: var(--bg-color); }
+
+.btn-cobrar {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap; /* Evita que el texto del botón se parta en dos líneas */
+}
+
+.btn-cobrar:hover { background-color: #059669; }
