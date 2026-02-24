@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-// 1. IMPORTAMOS LA HERRAMIENTA DE SEGURIDAD (AUTH)
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"; 
 
+// 1. TUS LLAVES DE FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyBDkoXL1SAcBT-J51THYeN77WH4LrlSfeg",
   authDomain: "sistema-de-pagos-6a6dc.firebaseapp.com",
@@ -14,23 +14,22 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app); // 2. INICIALIZAMOS LA SEGURIDAD
+const auth = getAuth(app); 
 
 const urlParams = new URLSearchParams(window.location.search);
 const idCliente = urlParams.get('id');
 let datosCliente = null;
 
-// 3. NUEVO: EL "GUARDIA DE SEGURIDAD"
-// Verificamos que tengas sesión iniciada antes de intentar descargar los datos
+// 2. SEGURIDAD: VERIFICAR SI HAY SESIÓN ACTIVA
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        cargarCliente(); // Si el admin está activo, trae los datos
+        cargarCliente(); 
     } else {
-        window.location.href = "index.html"; // Si no, expúlsalo al login
+        window.location.href = "index.html"; 
     }
 });
 
-// Función para descargar los datos de Firebase
+// 3. CARGAR DATOS DEL CLIENTE DESDE FIREBASE
 async function cargarCliente() {
     if (!idCliente) {
         alert("Error: No se encontró el ID del cliente.");
@@ -60,36 +59,66 @@ async function cargarCliente() {
     }
 }
 
-// Mostrar la lista de pagos en la tabla
+// 4. DIBUJAR LAS TARJETAS DE PAGOS Y BOTONES
 function renderizarTablaPagos() {
-    const tbody = document.getElementById('lista-pagos');
-    tbody.innerHTML = '';
+    const contenedor = document.getElementById('lista-pagos');
+    contenedor.innerHTML = '';
 
     if(!datosCliente.cuotas) return;
 
     datosCliente.cuotas.forEach((cuota, index) => {
-        const fila = document.createElement('tr');
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'pago-card';
+        
         const badgeClass = cuota.estado === 'pagado' ? 'badge' : 'badge pendiente';
         
-        let botonPago = '';
+        // Área del botón: Si debe, sale botón verde gigante. Si pagó, sale fecha y botón de Ticket.
+        let zonaAccion = '';
         if (cuota.estado === 'pendiente') {
-            botonPago = `<button class="btn-cobrar" onclick="procesarPago(${index})">Registrar Pago</button>`;
+            zonaAccion = `
+                <button class="btn-cobrar" style="width: 100%; padding: 14px; font-size: 16px;" onclick="procesarPago(${index})">
+                    💰 Registrar Pago
+                </button>
+            `;
         } else {
-            botonPago = `<span style="color: var(--text-muted); font-size: 13px; font-weight: 600;">Pagado el ${cuota.fecha_pago_real}</span>`;
+            zonaAccion = `
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #e2e8f0; padding: 12px; border-radius: 8px;">
+                    <span style="color: var(--text-muted); font-size: 13px; font-weight: 700;">
+                        ✅ Pagado: <br>${cuota.fecha_pago_real.split(' ')[0]}
+                    </span>
+                    <button onclick="reimprimirTicket(${index})" style="background: var(--info-color); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        📄 Ver Ticket
+                    </button>
+                </div>
+            `;
         }
 
-        fila.innerHTML = `
-            <td>Pago ${cuota.numero_pago} de ${datosCliente.cantidad_pagos}</td>
-            <td>${cuota.fecha_esperada}</td>
-            <td>$${cuota.monto}</td>
-            <td><span class="${badgeClass}">${cuota.estado.toUpperCase()}</span></td>
-            <td>${botonPago}</td>
+        // Armamos la tarjeta completa
+        tarjeta.innerHTML = `
+            <div class="pago-header">
+                <h4>Pago ${cuota.numero_pago} de ${datosCliente.cantidad_pagos}</h4>
+                <span class="${badgeClass}">${cuota.estado.toUpperCase()}</span>
+            </div>
+            <div class="pago-body">
+                <div class="pago-info">
+                    <p>Fecha Esperada</p>
+                    <strong>${cuota.fecha_esperada}</strong>
+                </div>
+                <div class="pago-info" style="text-align: right;">
+                    <p>Monto</p>
+                    <strong>$${cuota.monto}</strong>
+                </div>
+            </div>
+            <div class="pago-actions">
+                ${zonaAccion}
+            </div>
         `;
-        tbody.appendChild(fila);
+        
+        contenedor.appendChild(tarjeta);
     });
 }
 
-// Registrar el pago 
+// 5. FUNCIÓN PRINCIPAL PARA COBRAR UN PAGO
 window.procesarPago = async function(indexCuota) {
     const cuota = datosCliente.cuotas[indexCuota];
     
@@ -127,7 +156,20 @@ window.procesarPago = async function(indexCuota) {
     }
 }
 
-// Compartir por WhatsApp
+// 6. FUNCIÓN PARA REIMPRIMIR UN TICKET VIEJO
+window.reimprimirTicket = function(indexCuota) {
+    const cuota = datosCliente.cuotas[indexCuota];
+    
+    const opcion = confirm(`📄 RECUPERANDO TICKET DEL PAGO ${cuota.numero_pago}\n\n¿Qué deseas hacer?\n\n👉 [ACEPTAR] = Compartir por WhatsApp\n👉 [CANCELAR] = Ver para Imprimir / Guardar PDF`);
+    
+    if (opcion) {
+        compartirTicketTexto(cuota);
+    } else {
+        generarTicket(cuota); 
+    }
+}
+
+// 7. COMPARTIR POR WHATSAPP
 function compartirTicketTexto(cuota) {
     const textoTicket = `🧾 *COMPROBANTE DE PAGO* 🧾\n\n👤 *Cliente:* ${datosCliente.nombre}\n📅 *Fecha:* ${cuota.fecha_pago_real}\n💰 *Monto Pagado:* $${cuota.monto}\n🔢 *Pago:* ${cuota.numero_pago} de ${datosCliente.cantidad_pagos}\n\n📉 *Préstamo Original:* $${datosCliente.monto_prestado || datosCliente.monto_total_deuda}\n💵 *Saldo Restante:* $${datosCliente.saldo_restante}\n\n✅ _¡Gracias por su pago!_`;
 
@@ -142,7 +184,7 @@ function compartirTicketTexto(cuota) {
     }
 }
 
-// Imprimir ticket normal
+// 8. DISEÑAR E IMPRIMIR TICKET (Normal o PDF sin cerrarse)
 function generarTicket(cuota) {
     const ventanaTicket = window.open('', 'PRINT', 'height=600,width=400');
     if (!ventanaTicket || ventanaTicket.closed) {
@@ -162,6 +204,7 @@ function generarTicket(cuota) {
             <body>
                 <div class="ticket-box">
                     <h3>SISTEMA DE PAGOS</h3>
+                    <p>Miriam Ek Iuit</p>
                     <p>Comprobante de Abono</p>
                     <div class="divisor"></div>
                     <p><strong>Cliente:</strong> ${datosCliente.nombre}</p>
@@ -174,16 +217,19 @@ function generarTicket(cuota) {
                     <p style="font-weight: bold; font-size: 16px;">SALDO RESTANTE: $${datosCliente.saldo_restante}</p>
                     <div class="divisor"></div>
                     <p>¡Gracias por su pago!</p>
+                    <p>Este ticket es tu comprobante, guárdalo o imprímelo.</p>
+                    <p>Este comprobante no es válido como factura fiscal.</p>
                 </div>
             </body>
         </html>
     `);
     ventanaTicket.document.close();
     ventanaTicket.focus();
-    setTimeout(() => { ventanaTicket.print(); ventanaTicket.close(); }, 500);
+    // Le damos 1 segundo y ya NO CERRAMOS la ventana
+    setTimeout(() => { ventanaTicket.print(); }, 1000);
 }
 
-// Imprimir Historial Completo
+// 9. IMPRIMIR HISTORIAL COMPLETO
 const btnHistorial = document.getElementById('btn-imprimir-historial');
 if(btnHistorial) {
     btnHistorial.addEventListener('click', () => {
@@ -237,6 +283,7 @@ if(btnHistorial) {
         `);
         ventanaHistorial.document.close();
         ventanaHistorial.focus();
-        setTimeout(() => { ventanaHistorial.print(); ventanaHistorial.close(); }, 500);
+        // Le damos 1 segundo y ya NO CERRAMOS la ventana
+        setTimeout(() => { ventanaHistorial.print(); }, 1000);
     });
 }

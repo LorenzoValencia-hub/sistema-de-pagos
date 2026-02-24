@@ -369,3 +369,125 @@ tr:hover {
 }
 
 .btn-cobrar:hover { background-color: #059669; }
+
+/* =========================================
+   ESTILOS DE TARJETAS (MÓVIL) PARA PANEL
+========================================= */
+.lista-tarjetas {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espacio entre cada cliente */
+}
+
+.cliente-card {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cliente-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.cliente-card-header h4 { 
+    margin: 0; 
+    color: var(--text-main); 
+    font-size: 18px; 
+}
+
+.cliente-card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Divide la info en dos columnas */
+    gap: 10px;
+}
+
+.cliente-card-item { 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.cliente-card-item span { 
+    color: var(--text-muted); 
+    font-size: 11px; 
+    font-weight: 700; 
+    text-transform: uppercase;
+}
+
+.cliente-card-item strong {
+    font-size: 15px;
+    color: var(--text-main);
+}
+
+.cliente-card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.cliente-card-actions a, 
+.cliente-card-actions button {
+    flex: 1; /* Hacen que el botón ocupe todo el ancho posible */
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =========================================
+   ESTILOS DE TARJETAS DE PAGO (cliente.html)
+========================================= */
+.pago-card {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pago-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 10px;
+}
+
+.pago-header h4 { 
+    margin: 0; 
+    font-size: 16px; 
+    color: var(--text-main); 
+}
+
+.pago-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pago-info p { 
+    margin: 0 0 4px 0; 
+    font-size: 12px; 
+    color: var(--text-muted); 
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.pago-info strong { 
+    font-size: 18px; 
+    color: var(--text-main); 
+}
+
+.pago-actions {
+    margin-top: 5px;
+}

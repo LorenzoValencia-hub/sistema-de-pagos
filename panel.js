@@ -165,34 +165,61 @@ onSnapshot(collection(db, "clientes"), (snapshot) => {
         
         if(cliente.saldo_restante === undefined) return; 
 
-        const fila = document.createElement('tr');
+        // En lugar de una fila de tabla, creamos un DIV para la tarjeta
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'cliente-card';
         
         // --- CLIENTES ACTIVOS ---
         if (cliente.saldo_restante > 0) {
-            fila.innerHTML = `
-                <td>${cliente.nombre}</td>
-                <td>$${cliente.monto_prestado || 0}</td> <td>$${cliente.monto_total_deuda}</td>
-                <td style="color:red; font-weight:bold;">$${cliente.saldo_restante}</td>
-                <td style="text-transform: capitalize;">${cliente.frecuencia}</td>
-                <td style="display: flex; gap: 5px; align-items: center;">
-                    <a href="cliente.html?id=${idCliente}" style="padding:6px 12px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-size: 14px;">Ver Detalles</a>
-                    <button onclick="borrarCliente('${idCliente}', '${cliente.nombre}')" style="background:#dc3545; color:white; border:none; padding:6px 10px; border-radius:5px; cursor:pointer; font-size:14px;" title="Eliminar Cliente">🗑️</button>
-                </td>
+            tarjeta.innerHTML = `
+                <div class="cliente-card-header">
+                    <h4>👤 ${cliente.nombre}</h4>
+                    <span style="background: #e0e7ff; color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: capitalize;">${cliente.frecuencia}</span>
+                </div>
+                <div class="cliente-card-body">
+                    <div class="cliente-card-item">
+                        <span>Préstamo Inicial</span>
+                        <strong>$${cliente.monto_prestado || 0}</strong>
+                    </div>
+                    <div class="cliente-card-item">
+                        <span>Deuda Total</span>
+                        <strong>$${cliente.monto_total_deuda}</strong>
+                    </div>
+                    <div class="cliente-card-item" style="grid-column: span 2; background: #fef2f2; padding: 12px; border-radius: 8px; border: 1px solid #fca5a5; margin-top: 5px;">
+                        <span style="color: var(--danger-color);">Saldo Restante Actual</span>
+                        <strong style="color: var(--danger-color); font-size: 20px;">$${cliente.saldo_restante}</strong>
+                    </div>
+                </div>
+                <div class="cliente-card-actions">
+                    <a href="cliente.html?id=${idCliente}" style="padding:12px; background:var(--primary-color); color:white; text-decoration:none; border-radius:8px; font-size: 15px; font-weight: bold;">Ver Detalles y Cobrar</a>
+                    <button onclick="borrarCliente('${idCliente}', '${cliente.nombre}')" style="background:var(--danger-color); color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; font-size:18px; flex: 0.2;" title="Eliminar Cliente">🗑️</button>
+                </div>
             `;
-            listaActivos.appendChild(fila);
+            listaActivos.appendChild(tarjeta);
         } 
         // --- CLIENTES FINALIZADOS ---
         else {
-            fila.innerHTML = `
-                <td>${cliente.nombre}</td>
-                <td>$${cliente.monto_prestado || 0}</td> <td>$${cliente.monto_total_deuda}</td>
-                <td><span style="background:#28a745; color:white; padding:4px 8px; border-radius:4px;">PAGADO</span></td>
-                <td style="display: flex; gap: 5px; align-items: center;">
-                    <a href="cliente.html?id=${idCliente}" style="padding:6px 12px; background:#17a2b8; color:white; text-decoration:none; border-radius:5px; font-size: 14px;">Ver Historial</a>
-                    <button onclick="borrarCliente('${idCliente}', '${cliente.nombre}')" style="background:#dc3545; color:white; border:none; padding:6px 10px; border-radius:5px; cursor:pointer; font-size:14px;" title="Eliminar Cliente">🗑️</button>
-                </td>
+            tarjeta.innerHTML = `
+                <div class="cliente-card-header">
+                    <h4>👤 ${cliente.nombre}</h4>
+                    <span style="background: var(--success-color); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">PAGADO</span>
+                </div>
+                <div class="cliente-card-body">
+                    <div class="cliente-card-item">
+                        <span>Préstamo Inicial</span>
+                        <strong>$${cliente.monto_prestado || 0}</strong>
+                    </div>
+                    <div class="cliente-card-item">
+                        <span>Total Pagado</span>
+                        <strong>$${cliente.monto_total_deuda}</strong>
+                    </div>
+                </div>
+                <div class="cliente-card-actions">
+                    <a href="cliente.html?id=${idCliente}" style="padding:12px; background:#17a2b8; color:white; text-decoration:none; border-radius:8px; font-size: 15px; font-weight: bold;">Ver Historial</a>
+                    <button onclick="borrarCliente('${idCliente}', '${cliente.nombre}')" style="background:var(--danger-color); color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; font-size:18px; flex: 0.2;" title="Eliminar Cliente">🗑️</button>
+                </div>
             `;
-            listaFinalizados.appendChild(fila);
+            listaFinalizados.appendChild(tarjeta);
         }
     });
 });
