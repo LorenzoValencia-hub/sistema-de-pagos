@@ -68,6 +68,73 @@ const formCliente = document.getElementById('form-cliente');
 formCliente.addEventListener('submit', async (e) => {
     e.preventDefault(); 
 
+    const nombre = document.getElementById('nombre').value;
+    const montoPrestado = parseFloat(document.getElementById('monto-prestado').value);
+    const porcentajeInteres = parseFloat(document.getElementById('interes').value);
+    const cantidadPagos = parseInt(document.getElementById('pagos').value);
+    const frecuencia = document.getElementById('frecuencia').value;
+    const fechaInicio = document.getElementById('fecha').value;
+
+    const ganancia = montoPrestado * (porcentajeInteres / 100);
+    const montoTotal = montoPrestado + ganancia;
+    // Calculamos el pago base con 2 decimales
+    const montoPorPagoBase = parseFloat((montoTotal / cantidadPagos).toFixed(2));
+
+    const cuotas = [];
+    let fechaProyectada = new Date(fechaInicio + 'T12:00:00'); 
+    let sumaPagosAcumulados = 0;
+
+    // Generar el calendario
+    for(let i = 1; i <= cantidadPagos; i++) {
+        let montoDeEstaCuota = montoPorPagoBase;
+
+        // MAGIA FINANCIERA: Si es el ÚLTIMO pago, cobramos exactamente lo que falta para cerrar la cuenta
+        if (i === cantidadPagos) {
+            montoDeEstaCuota = parseFloat((montoTotal - sumaPagosAcumulados).toFixed(2));
+        }
+
+        sumaPagosAcumulados += montoDeEstaCuota;
+
+        cuotas.push({
+            numero_pago: i,
+            monto: montoDeEstaCuota,
+            fecha_esperada: fechaProyectada.toLocaleDateString('es-MX'),
+            estado: 'pendiente'
+        });
+
+        if(frecuencia === 'semanal') {
+            fechaProyectada.setDate(fechaProyectada.getDate() + 7);
+        } else {
+            fechaProyectada.setDate(fechaProyectada.getDate() + 15);
+        }
+    }
+
+    try {
+        await addDoc(collection(db, "clientes"), {
+            nombre: nombre,
+            monto_prestado: montoPrestado,
+            porcentaje_interes: porcentajeInteres,
+            monto_total_deuda: montoTotal,
+            saldo_restante: montoTotal, 
+            cantidad_pagos: cantidadPagos,
+            monto_por_pago: montoPorPagoBase,
+            frecuencia: frecuencia,
+            fecha_inicio: fechaInicio,
+            fecha_registro: new Date(),
+            cuotas: cuotas
+        });
+        
+        alert(`¡Cliente registrado exitosamente!`);
+        formCliente.reset(); 
+        calcularResumen(); 
+
+    } catch (error) {
+        console.error("Error al guardar:", error);
+    }
+});
+formCliente.addEventListener('submit', async (e) => {
+    e.preventDefault(); 
+
     // 1. Obtener valores nuevos
     const nombre = document.getElementById('nombre').value;
     const montoPrestado = parseFloat(document.getElementById('monto-prestado').value);

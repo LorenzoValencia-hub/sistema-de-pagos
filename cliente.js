@@ -129,8 +129,17 @@ window.procesarPago = async function(indexCuota) {
     const fechaHoy = new Date();
     cuota.fecha_pago_real = fechaHoy.toLocaleDateString('es-MX') + ' ' + fechaHoy.toLocaleTimeString('es-MX', {hour: '2-digit', minute:'2-digit'});
     
-    const nuevoSaldo = (datosCliente.saldo_restante - cuota.monto).toFixed(2);
-    datosCliente.saldo_restante = parseFloat(nuevoSaldo);
+    // (Arriba de esto está lo de la fecha de pago real)
+    
+    let nuevoSaldo = parseFloat((datosCliente.saldo_restante - cuota.monto).toFixed(2));
+
+    // NUEVO: Seguro contra centavos rebeldes.
+    // Si estamos cobrando el último pago de la lista, forzamos el saldo a cero.
+    if (indexCuota === datosCliente.cantidad_pagos - 1) {
+        nuevoSaldo = 0.00;
+    }
+
+    datosCliente.saldo_restante = nuevoSaldo;
 
     try {
         const docRef = doc(db, "clientes", idCliente);
