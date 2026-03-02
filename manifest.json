@@ -1,0 +1,21 @@
+{
+  "name": "Sistema de Pagos Pro",
+  "short_name": "Pagos Pro",
+  "description": "Gestor de clientes y cobros",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "icono.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icono.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
