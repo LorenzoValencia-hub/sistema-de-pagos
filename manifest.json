@@ -1,21 +1,25 @@
 {
-  "name": "Sistema de Pagos Pro",
+  "name": "Pagos Pro — Gestión Financiera",
   "short_name": "Pagos Pro",
-  "description": "Gestor de clientes y cobros",
+  "description": "Gestor moderno de préstamos, clientes y cobros con soporte sin conexión",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f1f5f9",
-  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "background_color": "#F2F2F7",
+  "theme_color": "#007AFF",
   "icons": [
     {
       "src": "icono.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "icono.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

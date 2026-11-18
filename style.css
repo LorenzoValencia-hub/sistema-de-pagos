@@ -1,493 +1,1439 @@
-/* =========================================
-   VARIABLES DE COLOR Y DISEÑO
-========================================= */
+/* =========================================================
+   SISTEMA DE PAGOS PRO — DISEÑO iOS / FINTECH WALLET
+========================================================= */
 :root {
-    --primary-color: #2563eb; /* Azul moderno */
-    --primary-hover: #1d4ed8;
-    --danger-color: #ef4444;  /* Rojo suave */
-    --success-color: #10b981; /* Verde esmeralda */
-    --info-color: #0ea5e9;    /* Azul claro */
-    --bg-color: #f1f5f9;      /* Fondo gris muy claro */
-    --card-bg: #ffffff;
-    --text-main: #0f172a;     /* Texto casi negro */
-    --text-muted: #64748b;    /* Texto secundario gris */
-    --border-color: #e2e8f0;
-    --radius: 12px;
+    --ios-bg: #F2F2F7;
+    --ios-card: #FFFFFF;
+    --ios-card-secondary: #F8FAFC;
+    --ios-blue: #007AFF;
+    --ios-blue-dark: #0056CC;
+    --ios-indigo: #5856D6;
+    --ios-emerald: #34C759;
+    --ios-emerald-dark: #248A3D;
+    --ios-red: #FF3B30;
+    --ios-amber: #FF9500;
+    --ios-text: #1C1C1E;
+    --ios-text-secondary: #6E6E73;
+    --ios-text-muted: #8E8E93;
+    --ios-separator: rgba(60, 60, 67, 0.12);
+    --ios-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.04);
+    --ios-shadow-md: 0 8px 24px rgba(15, 23, 42, 0.07);
+    --ios-shadow-wallet: 0 14px 32px -6px rgba(0, 122, 255, 0.28);
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
 }
 
-/* =========================================
-   RESETEO BÁSICO Y TIPOGRAFÍA
-========================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-main);
+body.ios-body {
+    background-color: var(--ios-bg);
+    color: var(--ios-text);
     -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding-bottom: 32px;
 }
 
-/* =========================================
+body.has-tabbar {
+    padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================================================
+   BANNER DE MODO SIN CONEXIÓN (OFFLINE)
+========================================================= */
+.network-banner {
+    background: linear-gradient(90deg, #1C1C1E 0%, #2C2C2E 100%);
+    color: #FFFFFF;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 9px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 250;
+}
+
+.dot-offline {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--ios-amber);
+    box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.25);
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   BARRA DE NAVEGACIÓN SUPERIOR ESTILO iOS (GLASSMORPHISM)
+========================================================= */
+.ios-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 150;
+    background: rgba(242, 242, 247, 0.82);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 0.5px solid var(--ios-separator);
+    padding: env(safe-area-inset-top, 0px) 16px 0 16px;
+}
+
+.ios-navbar-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.brand-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon-mini {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--ios-blue) 0%, var(--ios-indigo) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 122, 255, 0.25);
+}
+
+.navbar-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--ios-text);
+    line-height: 1.15;
+}
+
+/* Indicador de sincronización en vivo */
+.sync-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-top: 2px;
+}
+
+.sync-pill .sync-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.sync-pill.online {
+    background: rgba(52, 199, 89, 0.14);
+    color: var(--ios-emerald-dark);
+}
+.sync-pill.online .sync-dot {
+    background: var(--ios-emerald);
+}
+
+.sync-pill.offline {
+    background: rgba(255, 149, 0, 0.16);
+    color: #B25000;
+}
+.sync-pill.offline .sync-dot {
+    background: var(--ios-amber);
+}
+
+.sync-pill.syncing {
+    background: rgba(0, 122, 255, 0.14);
+    color: var(--ios-blue);
+}
+.sync-pill.syncing .sync-dot {
+    background: var(--ios-blue);
+}
+
+.ios-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--ios-blue);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 6px 4px 6px 0;
+}
+
+.btn-ios-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(118, 118, 128, 0.12);
+    color: var(--ios-text);
+    border: none;
+    padding: 8px 13px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-ios-ghost:active {
+    transform: scale(0.96);
+    background: rgba(118, 118, 128, 0.2);
+}
+
+/* =========================================================
    PANTALLA DE LOGIN (index.html)
-========================================= */
+========================================================= */
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 92vh;
     padding: 20px;
 }
 
 .login-box {
-    background: var(--card-bg);
     width: 100%;
-    max-width: 400px;
-    padding: 40px 30px;
-    border-radius: var(--radius);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    max-width: 390px;
     text-align: center;
 }
 
-.login-box h2 { font-size: 24px; margin-bottom: 8px; }
-.login-box p { color: var(--text-muted); margin-bottom: 30px; font-size: 14px; }
-
-/* =========================================
-   BARRA DE NAVEGACIÓN SUPERIOR
-========================================= */
-.navbar {
-    background-color: #1e293b; /* Color oscuro profesional */
+.app-logo-badge {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 16px auto;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
     color: white;
-    padding: 15px 20px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    box-shadow: 0 12px 24px -4px rgba(0, 122, 255, 0.38);
 }
 
-.navbar h2 { font-size: 18px; font-weight: 600; }
-
-.btn-danger {
-    background-color: var(--danger-color);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+.login-box h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+    margin-bottom: 4px;
 }
 
-/* =========================================
-   MENÚ DE PESTAÑAS (TABS)
-========================================= */
-.menu-tabs {
+.login-box .subtitle {
+    color: var(--ios-text-secondary);
+    font-size: 15px;
+    margin-bottom: 28px;
+}
+
+.ios-input-card {
+    background: var(--ios-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--ios-shadow-sm);
+    overflow: hidden;
+    margin-bottom: 18px;
+    border: 0.5px solid var(--ios-separator);
+}
+
+.ios-field {
     display: flex;
-    gap: 10px;
-    padding: 15px 20px;
-    background-color: var(--card-bg);
-    overflow-x: auto; /* Permite deslizar si no caben */
-    white-space: nowrap; /* Evita que el texto se parta */
-    border-bottom: 1px solid var(--border-color);
-    /* Ocultar barra de scroll en celulares */
-    scrollbar-width: none; 
+    align-items: center;
+    padding: 4px 16px;
 }
-.menu-tabs::-webkit-scrollbar { display: none; }
 
-.tab-btn {
-    background-color: var(--bg-color);
-    color: var(--text-muted);
-    padding: 12px 20px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+.ios-field label {
+    width: 72px;
+    text-align: left;
     font-size: 15px;
     font-weight: 600;
+    color: var(--ios-text);
+    flex-shrink: 0;
+}
+
+.ios-field input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 13px 0;
+    font-size: 16px; /* Evita zoom automático en iOS */
+    color: var(--ios-text);
+    outline: none;
+}
+
+.ios-divider {
+    height: 0.5px;
+    background: var(--ios-separator);
+    margin-left: 16px;
+}
+
+.error-toast {
+    margin-top: 14px;
+    background: rgba(255, 59, 48, 0.12);
+    color: var(--ios-red);
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    font-weight: 600;
+}
+
+.login-footer {
+    margin-top: 26px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ios-text-muted);
+    font-size: 12.5px;
+    font-weight: 500;
+}
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL Y TARJETA WALLET HERO
+========================================================= */
+.dashboard-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.wallet-hero-card {
+    background: linear-gradient(135deg, #0062CC 0%, #007AFF 50%, #4F46E5 100%);
+    color: white;
+    border-radius: var(--radius-xl);
+    padding: 22px;
+    box-shadow: var(--ios-shadow-wallet);
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+}
+
+.wallet-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.wallet-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.85;
+    margin-bottom: 4px;
+}
+
+.wallet-amount {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    font-variant-numeric: tabular-nums;
+}
+
+.wallet-chip {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wallet-hero-stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.16);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+}
+
+.wallet-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.wallet-stat-label {
+    font-size: 11px;
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+.wallet-stat strong {
+    font-size: 15px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.wallet-stat-divider {
+    width: 1px;
+    height: 26px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================================================
+   CONTROL SEGMENTADO ESTILO iOS (TABS)
+========================================================= */
+.ios-segmented-control {
+    display: flex;
+    background: rgba(118, 118, 128, 0.14);
+    padding: 3px;
+    border-radius: 11px;
+    margin-bottom: 20px;
+    gap: 3px;
+}
+
+.tab-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--ios-text-secondary);
+    padding: 9px 10px;
+    border-radius: 8.5px;
+    font-size: 13.5px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    flex: 1; /* Hacemos que midan lo mismo en celulares */
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .tab-btn.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+    background: var(--ios-card);
+    color: var(--ios-text);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 0.5px 1px rgba(0, 0, 0, 0.06);
 }
 
-.tab-content { display: none; }
-.active-content { display: block; animation: fadeIn 0.3s ease; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+.tab-count-badge {
+    background: rgba(0, 122, 255, 0.12);
+    color: var(--ios-blue);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 999px;
 }
 
-/* =========================================
-   CONTENEDOR PRINCIPAL Y TARJETAS
-========================================= */
-.dashboard-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+.tab-content {
+    display: none;
 }
 
-.card {
-    background: var(--card-bg);
-    padding: 24px;
-    border-radius: var(--radius);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    border: 1px solid var(--border-color);
+.active-content {
+    display: block;
+    animation: iosSlideUp 0.24s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.card h3 {
-    margin-bottom: 20px;
-    color: var(--text-main);
-    font-size: 18px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
+@keyframes iosSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* =========================================
-   FORMULARIOS (Diseño Táctil)
-========================================= */
+.section-header-ios {
+    margin-bottom: 14px;
+    padding: 0 2px;
+}
+
+.section-header-ios h3 {
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    color: var(--ios-text);
+}
+
+.section-header-ios p {
+    font-size: 13.5px;
+    color: var(--ios-text-secondary);
+    margin-top: 2px;
+}
+
+/* =========================================================
+   FORMULARIO AGRUPADO ESTILO iOS SETTINGS / WALLET
+========================================================= */
+.ios-group-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ios-text-secondary);
+    letter-spacing: 0.4px;
+    padding: 0 14px 6px 14px;
+    text-transform: uppercase;
+}
+
+.ios-card-group {
+    background: var(--ios-card);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    box-shadow: var(--ios-shadow-sm);
+    border: 0.5px solid var(--ios-separator);
+    margin-bottom: 18px;
+}
+
 .row {
     display: flex;
-    flex-direction: column; /* Apila en celular */
+    flex-direction: column;
     gap: 0;
 }
 
+@media (min-width: 560px) {
+    .row {
+        flex-direction: row;
+        gap: 14px;
+    }
+}
+
 .input-group {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     width: 100%;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
+    margin-bottom: 6px;
+    font-size: 13px;
     font-weight: 600;
-    color: var(--text-main);
+    color: var(--ios-text-secondary);
 }
 
-.input-group input, 
+.input-group input,
 .input-group select {
     width: 100%;
-    /* 16px mínimo para evitar que el iPhone haga zoom automático */
-    font-size: 16px; 
-    padding: 14px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background-color: var(--bg-color);
-    color: var(--text-main);
+    font-size: 16px; /* 16px para que Safari iOS no haga zoom */
+    padding: 13px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(60, 60, 67, 0.14);
+    background-color: var(--ios-bg);
+    color: var(--ios-text);
+    font-weight: 500;
     outline: none;
-    transition: all 0.2s;
+    transition: all 0.18s ease;
 }
 
-.input-group input:focus, 
+.input-group input:focus,
 .input-group select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-    background-color: white;
+    background-color: #FFFFFF;
+    border-color: var(--ios-blue);
+    box-shadow: 0 0 0 3.5px rgba(0, 122, 255, 0.16);
 }
 
-button[type="submit"] {
-    width: 100%;
-    padding: 16px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
-    margin-top: 10px;
-}
-
-/* =========================================
-   TABLAS RESPONSIVAS
-========================================= */
-.table-responsive {
-    width: 100%;
-    overflow-x: auto; /* Deslizamiento horizontal */
-    -webkit-overflow-scrolling: touch;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 650px; /* Obliga a la tabla a no aplastarse en celulares */
-    background: white;
-}
-
-th {
-    background-color: var(--bg-color);
-    color: var(--text-muted);
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 14px 16px;
-    text-align: left;
-    border-bottom: 2px solid var(--border-color);
-}
-
-td {
-    padding: 16px;
-    font-size: 14px;
-    color: var(--text-main);
-    border-bottom: 1px solid var(--border-color);
-    vertical-align: middle;
-}
-
-tr:hover {
-    background-color: #f8fafc;
-}
-
-/* =========================================
-   ADAPTACIÓN PARA PANTALLAS GRANDES (PC)
-========================================= */
-@media (min-width: 768px) {
-    .row {
-        flex-direction: row;
-        gap: 20px;
-    }
-    .menu-tabs {
-        justify-content: center; /* Centra las pestañas en PC */
-    }
-    .tab-btn {
-        flex: none;
-        width: 250px; /* Ancho fijo en PC */
-    }
-}
-
-/* =========================================
-   ESTILOS PERFIL DEL CLIENTE (cliente.html)
-========================================= */
-.btn-regresar {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 600;
-    margin-bottom: 20px;
-    font-size: 16px;
-    transition: color 0.2s;
-}
-
-.btn-regresar:hover { color: var(--primary-hover); }
-
-.header-cliente { margin-bottom: 20px; }
-
-.cliente-info-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.cliente-info-top h2 { margin: 0; color: var(--text-main); font-size: 22px; }
-
-.cliente-stats { gap: 15px; margin-bottom: 20px; }
-
-.stat-box {
-    background-color: var(--bg-color);
-    padding: 15px;
-    border-radius: 8px;
-    flex: 1;
-    text-align: center;
-    border: 1px solid var(--border-color);
-}
-
-.stat-box p { 
-    color: var(--text-muted); 
-    font-size: 12px; 
-    font-weight: 700; 
-    text-transform: uppercase; 
-    margin-bottom: 5px; 
-}
-
-.stat-box h3 { color: var(--text-main); font-size: 24px; margin: 0; }
-
-/* Caja resaltada para el saldo que debe */
-.stat-box.highlight { background-color: #fef2f2; border-color: #fca5a5; }
-.stat-box.highlight h3 { color: var(--danger-color); }
-
-.badge {
-    background-color: var(--success-color);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* Color naranja para lo que aún no se paga */
-.badge.pendiente { background-color: #f59e0b; } 
-
-.btn-secondary {
-    width: 100%;
-    padding: 14px;
-    background-color: white;
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    transition: 0.2s;
-}
-
-.btn-secondary:hover { background-color: var(--bg-color); }
-
-.btn-cobrar {
-    background-color: var(--success-color);
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-    white-space: nowrap; /* Evita que el texto del botón se parta en dos líneas */
-}
-
-.btn-cobrar:hover { background-color: #059669; }
-
-/* =========================================
-   ESTILOS DE TARJETAS (MÓVIL) PARA PANEL
-========================================= */
-.lista-tarjetas {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Espacio entre cada cliente */
-}
-
-.cliente-card {
-    background: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    padding: 15px;
+/* Tarjeta de vista previa en vivo del préstamo */
+.loan-preview-card {
+    background: var(--ios-card);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    border: 1px solid rgba(0, 122, 255, 0.2);
+    box-shadow: var(--ios-shadow-sm);
+    margin-bottom: 18px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.loan-preview-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.loan-preview-item span {
+    font-size: 13.5px;
+    color: var(--ios-text-secondary);
+    font-weight: 500;
+}
+
+.loan-preview-item strong {
+    font-size: 18px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.loan-preview-item.highlight strong {
+    font-size: 22px;
+}
+
+.loan-preview-divider {
+    height: 1px;
+    background: var(--ios-separator);
+}
+
+.emerald-text {
+    color: var(--ios-emerald-dark) !important;
+}
+
+.primary-text {
+    color: var(--ios-blue) !important;
+}
+
+.danger-text {
+    color: var(--ios-red) !important;
+}
+
+/* Botones principales estilo iOS */
+.btn-ios-primary {
+    width: 100%;
+    padding: 15px 18px;
+    background: linear-gradient(180deg, #0A84FF 0%, #007AFF 100%);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 6px 16px rgba(0, 122, 255, 0.28);
+    transition: transform 0.12s ease, opacity 0.15s ease;
+}
+
+.btn-ios-primary:active {
+    transform: scale(0.98);
+    opacity: 0.92;
+}
+
+.btn-ios-emerald {
+    width: 100%;
+    padding: 15px 18px;
+    background: linear-gradient(180deg, #34C759 0%, #28B44B 100%);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(52, 199, 89, 0.3);
+}
+
+.btn-ios-secondary {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--ios-blue);
+    border: none;
+    border-radius: 14px;
+    font-size: 15.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-ios-cancel {
+    width: 100%;
+    padding: 14px 18px;
+    background: var(--ios-bg);
+    color: var(--ios-text-secondary);
+    border: none;
+    border-radius: 14px;
+    font-size: 15.5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* =========================================================
+   BUSCADOR ESTILO SPOTLIGHT iOS
+========================================================= */
+.ios-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(118, 118, 128, 0.12);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    color: var(--ios-text-muted);
+}
+
+.ios-search-bar input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    color: var(--ios-text);
+    outline: none;
+}
+
+/* =========================================================
+   TARJETAS DE CLIENTES (panel.html)
+========================================================= */
+.lista-tarjetas {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cliente-card {
+    background: var(--ios-card);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    box-shadow: var(--ios-shadow-sm);
+    border: 0.5px solid var(--ios-separator);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
 .cliente-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
 }
 
-.cliente-card-header h4 { 
-    margin: 0; 
-    color: var(--text-main); 
-    font-size: 18px; 
+.cliente-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.avatar-circle.emerald {
+    background: linear-gradient(135deg, #34C759 0%, #248A3D 100%);
+}
+
+.cliente-card-header h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ios-text);
+    margin-bottom: 4px;
+}
+
+.card-subchips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.freq-pill,
+.cuota-pill,
+.paid-pill,
+.chip-sync-pending {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    text-transform: capitalize;
+}
+
+.freq-pill {
+    background: rgba(0, 122, 255, 0.12);
+    color: var(--ios-blue);
+}
+
+.cuota-pill {
+    background: var(--ios-bg);
+    color: var(--ios-text-secondary);
+}
+
+.paid-pill {
+    background: rgba(52, 199, 89, 0.15);
+    color: var(--ios-emerald-dark);
+}
+
+.chip-sync-pending {
+    background: rgba(255, 149, 0, 0.16);
+    color: #B25000;
+}
+
+.mini-progress-wrap {
+    width: 100%;
+    height: 6px;
+    background: var(--ios-bg);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.mini-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ios-blue) 0%, var(--ios-emerald) 100%);
+    border-radius: 999px;
+    transition: width 0.3s ease;
 }
 
 .cliente-card-body {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Divide la info en dos columnas */
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
 }
 
-.cliente-card-item { 
-    display: flex; 
-    flex-direction: column; 
+.cliente-card-item {
+    background: var(--ios-bg);
+    padding: 10px 12px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.cliente-card-item span { 
-    color: var(--text-muted); 
-    font-size: 11px; 
-    font-weight: 700; 
+.cliente-card-item span {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ios-text-secondary);
     text-transform: uppercase;
 }
 
 .cliente-card-item strong {
-    font-size: 15px;
-    color: var(--text-main);
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--ios-text);
+    font-variant-numeric: tabular-nums;
+}
+
+.saldo-highlight-box {
+    background: rgba(255, 59, 48, 0.08);
+    border: 1px solid rgba(255, 59, 48, 0.18);
 }
 
 .cliente-card-actions {
     display: flex;
     gap: 10px;
-    margin-top: 5px;
 }
 
-.cliente-card-actions a, 
-.cliente-card-actions button {
-    flex: 1; /* Hacen que el botón ocupe todo el ancho posible */
-    text-align: center;
-    display: flex;
-    justify-content: center;
+.btn-card-primary,
+.btn-card-secondary {
+    flex: 1;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 13px 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 700;
+    transition: transform 0.1s ease;
 }
 
-/* =========================================
-   ESTILOS DE TARJETAS DE PAGO (cliente.html)
-========================================= */
-.pago-card {
-    background: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 15px;
+.btn-card-primary {
+    background: var(--ios-blue);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.22);
+}
+
+.btn-card-secondary {
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--ios-blue);
+}
+
+.btn-card-delete {
+    width: 46px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255, 59, 48, 0.1);
+    color: var(--ios-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.empty-state-ios {
+    background: var(--ios-card);
+    border-radius: var(--radius-lg);
+    padding: 36px 20px;
+    text-align: center;
+    color: var(--ios-text-secondary);
+    font-size: 14.5px;
+    border: 0.5px dashed var(--ios-separator);
+}
+
+/* =========================================================
+   PERFIL DE CLIENTE Y CALENDARIO DE PAGOS (cliente.html)
+========================================================= */
+.client-wallet-card {
+    background: var(--ios-card);
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    box-shadow: var(--ios-shadow-md);
+    border: 0.5px solid var(--ios-separator);
+    margin-bottom: 22px;
+}
+
+.client-profile-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.client-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+    color: white;
+    font-size: 19px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 14px rgba(0, 122, 255, 0.25);
+    flex-shrink: 0;
+}
+
+.client-title-block h2 {
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    margin-bottom: 6px;
+}
+
+.client-meta-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.meta-chip {
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(0, 122, 255, 0.12);
+    color: var(--ios-blue);
+    text-transform: capitalize;
+}
+
+.meta-chip.subtle {
+    background: var(--ios-bg);
+    color: var(--ios-text-secondary);
+}
+
+.progress-block {
+    margin-bottom: 18px;
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ios-text-secondary);
+    margin-bottom: 6px;
+}
+
+.ios-progress-track {
+    width: 100%;
+    height: 8px;
+    background: var(--ios-bg);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.ios-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ios-blue) 0%, var(--ios-emerald) 100%);
+    border-radius: 999px;
+    transition: width 0.35s ease;
+}
+
+.cliente-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.stat-box {
+    background: var(--ios-bg);
+    padding: 14px;
+    border-radius: 14px;
+    text-align: left;
+}
+
+.stat-box p {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ios-text-secondary);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.stat-box h3 {
+    font-size: 21px;
+    font-weight: 800;
+    color: var(--ios-text);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-box.highlight {
+    background: rgba(255, 59, 48, 0.08);
+    border: 1px solid rgba(255, 59, 48, 0.2);
+}
+
+.stat-box.highlight h3 {
+    color: var(--ios-red);
+}
+
+/* Tarjetas de Cuotas (Calendario de Pagos) */
+.pagos-timeline {
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.pago-card {
+    background: var(--ios-card);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: var(--ios-shadow-sm);
+    border: 1px solid var(--ios-separator);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.15s ease;
+}
+
+.pago-card.is-next-due {
+    border: 1.5px solid var(--ios-blue);
+    box-shadow: 0 8px 20px rgba(0, 122, 255, 0.12);
+}
+
+.pago-card.is-paid {
+    background: rgba(255, 255, 255, 0.78);
 }
 
 .pago-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px dashed var(--border-color);
-    padding-bottom: 10px;
+    gap: 8px;
 }
 
-.pago-header h4 { 
-    margin: 0; 
-    font-size: 16px; 
-    color: var(--text-main); 
+.pago-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pago-number-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--ios-bg);
+    color: var(--ios-text);
+    font-weight: 700;
+    font-size: 13.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pago-card.is-paid .pago-number-circle {
+    background: rgba(52, 199, 89, 0.16);
+    color: var(--ios-emerald-dark);
+}
+
+.pago-card.is-next-due .pago-number-circle {
+    background: var(--ios-blue);
+    color: white;
+}
+
+.pago-header h4 {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--ios-text);
+}
+
+.pago-date-sub {
+    font-size: 12.5px;
+    color: var(--ios-text-secondary);
+}
+
+.badge {
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 4px 9px;
+    border-radius: 999px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.badge.paid {
+    background: rgba(52, 199, 89, 0.15);
+    color: var(--ios-emerald-dark);
+}
+
+.badge.next-due {
+    background: rgba(0, 122, 255, 0.14);
+    color: var(--ios-blue);
+}
+
+.badge.pendiente {
+    background: rgba(255, 149, 0, 0.16);
+    color: #B25000;
 }
 
 .pago-body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: var(--ios-bg);
+    padding: 10px 14px;
+    border-radius: 12px;
 }
 
-.pago-info p { 
-    margin: 0 0 4px 0; 
-    font-size: 12px; 
-    color: var(--text-muted); 
-    text-transform: uppercase;
+.pago-info p {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ios-text-secondary);
+}
+
+.pago-amount-display strong {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--ios-text);
+    font-variant-numeric: tabular-nums;
+}
+
+.btn-cobrar-ios {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: var(--ios-emerald);
+    color: white;
+    font-size: 15px;
     font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(52, 199, 89, 0.25);
+    transition: transform 0.1s ease;
 }
 
-.pago-info strong { 
-    font-size: 18px; 
-    color: var(--text-main); 
+.btn-cobrar-ios:active {
+    transform: scale(0.98);
 }
 
-.pago-actions {
-    margin-top: 5px;
+.paid-footer-ios {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding-top: 2px;
+}
+
+.paid-timestamp {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.check-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(52, 199, 89, 0.16);
+    color: var(--ios-emerald-dark);
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.paid-timestamp strong {
+    display: block;
+    font-size: 13px;
+    color: var(--ios-text);
+}
+
+.paid-timestamp small {
+    font-size: 11.5px;
+    color: var(--ios-text-secondary);
+}
+
+.btn-ticket-ios {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(0, 122, 255, 0.12);
+    color: var(--ios-blue);
+    border: none;
+    padding: 9px 13px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* =========================================================
+   BARRA INFERIOR ESTILO iOS (BOTTOM TAB BAR PARA MÓVIL)
+========================================================= */
+.ios-bottom-tabbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-top: 0.5px solid var(--ios-separator);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)) 8px;
+}
+
+.bottom-tab-item {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--ios-text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 0;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.bottom-tab-item.active {
+    color: var(--ios-blue);
+}
+
+.tab-icon-wrap {
+    position: relative;
+    display: inline-flex;
+}
+
+.mobile-tab-badge {
+    position: absolute;
+    top: -4px;
+    right: -10px;
+    background: var(--ios-red);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (min-width: 768px) {
+    .ios-bottom-tabbar {
+        display: none;
+    }
+    body.has-tabbar {
+        padding-bottom: 36px;
+    }
+}
+
+@media (max-width: 420px) {
+    .hide-xs {
+        display: none;
+    }
+}
+
+/* =========================================================
+   ACTION SHEET MODAL INFERIOR ESTILO iOS
+========================================================= */
+.ios-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 350;
+    background: rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fadeInBackdrop 0.2s ease;
+}
+
+@keyframes fadeInBackdrop {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.ios-action-sheet {
+    width: 100%;
+    max-width: 480px;
+    background: var(--ios-card);
+    border-radius: 26px 26px 0 0;
+    padding: 12px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.15);
+    animation: slideUpSheet 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slideUpSheet {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.sheet-handle {
+    width: 40px;
+    height: 5px;
+    background: rgba(60, 60, 67, 0.2);
+    border-radius: 999px;
+    margin: 0 auto 16px auto;
+}
+
+.sheet-header {
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.sheet-icon-badge {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sheet-icon-badge.emerald {
+    background: rgba(52, 199, 89, 0.16);
+    color: var(--ios-emerald-dark);
+}
+
+.sheet-icon-badge.blue {
+    background: rgba(0, 122, 255, 0.14);
+    color: var(--ios-blue);
+}
+
+.sheet-header h3 {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.sheet-header p {
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+    margin-top: 2px;
+}
+
+.sheet-amount-box {
+    background: var(--ios-bg);
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.sheet-amount-box span {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--ios-text-secondary);
+}
+
+.sheet-amount-box h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--ios-text);
+    margin: 4px 0;
+}
+
+.sheet-amount-box small {
+    font-size: 12.5px;
+    color: var(--ios-text-secondary);
+}
+
+.sheet-receipt-preview {
+    background: var(--ios-bg);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13.5px;
+}
+
+.receipt-row span {
+    color: var(--ios-text-secondary);
+}
+
+.sheet-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* =========================================================
+   TOAST FLOTANTE ESTILO iOS DYNAMIC ISLAND
+========================================================= */
+.ios-toast {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 400;
+    background: rgba(28, 28, 30, 0.94);
+    color: white;
+    padding: 11px 18px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
+    max-width: 90vw;
+    text-align: center;
+    animation: popToast 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes popToast {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -12px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+    }
 }

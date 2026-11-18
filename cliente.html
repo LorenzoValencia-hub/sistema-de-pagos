@@ -2,25 +2,77 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles del Cliente</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Detalle del Cliente — Pagos Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#F2F2F7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Pagos Pro">
+    <link rel="apple-touch-icon" href="icono.png">
+    <link rel="stylesheet" href="style.css?v=2.0">
 </head>
-<body>
-    <div class="dashboard-container">
-        <a href="panel.html" class="btn-regresar">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            Regresar al Panel
-        </a>
+<body class="ios-body">
+    <!-- Banner de estado Offline / Sincronización -->
+    <div id="network-banner" class="network-banner hidden">
+        <span class="dot-offline"></span>
+        <span id="network-banner-text">Modo sin conexión — Los cobros se guardan en el celular y subirán al reconectar</span>
+    </div>
 
-        <div class="card header-cliente">
-            <div class="cliente-info-top">
-                <h2 id="nombre-cliente">Cargando cliente...</h2>
+    <!-- Barra Superior Estilo iOS con Botón Atrás Nativo -->
+    <header class="ios-navbar">
+        <div class="ios-navbar-inner">
+            <a href="panel.html" class="ios-back-link">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                <span>Clientes</span>
+            </a>
+
+            <span id="sync-status-pill" class="sync-pill online">
+                <span class="sync-dot"></span>
+                <span id="sync-status-label">En línea</span>
+            </span>
+
+            <button id="btn-imprimir-historial" class="btn-ios-ghost" title="Imprimir Historial">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span class="hide-xs">Historial</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <!-- Tarjeta Principal de Estado de Cuenta Tipo Apple Wallet -->
+        <section class="client-wallet-card">
+            <div class="client-profile-row">
+                <div class="client-avatar" id="avatar-iniciales">CL</div>
+                <div class="client-title-block">
+                    <h2 id="nombre-cliente">Cargando cliente...</h2>
+                    <div class="client-meta-chips">
+                        <span id="chip-frecuencia" class="meta-chip">Semanal</span>
+                        <span id="chip-progreso-texto" class="meta-chip subtle">0 de 0 pagos</span>
+                    </div>
                 </div>
-            
-            <div class="cliente-stats row">
+            </div>
+
+            <!-- Barra de progreso de liquidación -->
+            <div class="progress-block">
+                <div class="progress-labels">
+                    <span>Progreso del préstamo</span>
+                    <strong id="porcentaje-progreso">0%</strong>
+                </div>
+                <div class="ios-progress-track">
+                    <div id="barra-progreso" class="ios-progress-fill" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="cliente-stats-grid">
                 <div class="stat-box">
-                    <p>Deuda Total Original</p>
+                    <p>Deuda Total</p>
                     <h3 id="deuda-total">$0.00</h3>
                 </div>
                 <div class="stat-box highlight">
@@ -28,22 +80,32 @@
                     <h3 id="saldo-restante">$0.00</h3>
                 </div>
             </div>
+        </section>
 
-            <button id="btn-imprimir-historial" class="btn-secondary">
-                🖨️ Imprimir Historial Completo
-            </button>
-        </div>
-
-        <div class="card">
-            <h3>Calendario de Pagos</h3>
-            <div class="card">
-            <h3>Calendario de Pagos</h3>
-            <div id="lista-pagos">
+        <!-- Lista de Cuotas / Calendario de Pagos -->
+        <section class="schedule-section">
+            <div class="section-header-ios">
+                <div>
+                    <h3>Calendario de Pagos</h3>
+                    <p>Toca una cuota pendiente para registrar el abono</p>
                 </div>
-        </div>
+            </div>
+
+            <div id="lista-pagos" class="pagos-timeline"></div>
+        </section>
+    </main>
+
+    <!-- Action Sheet / Modal Inferior Estilo iOS para Confirmar Pago o Compartir Comprobante -->
+    <div id="ios-sheet-backdrop" class="ios-sheet-backdrop hidden">
+        <div class="ios-action-sheet" role="dialog" aria-modal="true">
+            <div class="sheet-handle"></div>
+            <div id="sheet-content"></div>
         </div>
     </div>
 
-    <script type="module" src="cliente.js"></script>
+    <!-- Toast de Notificación Estilo iOS -->
+    <div id="ios-toast" class="ios-toast hidden"></div>
+
+    <script type="module" src="cliente.js?v=2.0"></script>
 </body>
 </html>
